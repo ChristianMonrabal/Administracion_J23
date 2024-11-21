@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['nombre'] = $nombreUsuario;
                         $_SESSION['apellido'] = $apellidoUsuario;
 
-                        header("Location: ../index.php");
+                        header("Location: ../admin_dashboard.php");
                         exit();
                     } else {
                         $errorMessage = "No tienes permisos de administrador.";
