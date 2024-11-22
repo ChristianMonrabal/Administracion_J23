@@ -8,12 +8,30 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') 
 
 include("./db/conexion.php");
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_alumno'])) {
+    $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
+    $matricula = $_POST['matricula'];
+    $correo = $_POST['correo'];
+    $curso = $_POST['curso'];
+
+    $insertQuery = "INSERT INTO alumnos (nombre_alumno, apellido_alumno, matricula_alumno, correo_alumno, id_curso) VALUES (?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $insertQuery);
+    mysqli_stmt_bind_param($stmt, "ssssi", $nombre, $apellido, $matricula, $correo, $curso);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    header("Location: admin_dashboard.php");
+    exit();
+}
+
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10; // Número de alumnos por página
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 $query = "
     SELECT 
+        a.id_alumno, 
         a.nombre_alumno AS nombre_usuario, 
         a.apellido_alumno AS apellido_usuario, 
         a.matricula_alumno AS username_usuario, 
@@ -29,7 +47,6 @@ mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -41,6 +58,7 @@ $result = mysqli_stmt_get_result($stmt);
 </head>
 <body>
     <div class="container mt-5">
+        <!-- Tarjeta de Bienvenida -->
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h2>Bienvenido a J23</h2>
@@ -53,7 +71,9 @@ $result = mysqli_stmt_get_result($stmt);
                 </form>
             </div>
         </div>
-        </form>
+        <!-- Fin de la Tarjeta de Bienvenida -->
+
+        <!-- Formulario para Crear Alumno -->
         <form method="POST" action="admin_dashboard.php" class="mb-4">
             <h3>Crear Alumno</h3>
             <div class="form-group">
@@ -86,22 +106,30 @@ $result = mysqli_stmt_get_result($stmt);
             </div>
             <button type="submit" name="crear_alumno" class="btn btn-primary">Crear Alumno</button>
         </form>
+        <!-- Fin del Formulario para Crear Alumno -->
+
+        <!-- Lista de Alumnos -->
         <h2 class="mt-5">Lista de Alumnos</h2>
-        <form method="GET" action="">
+        <!-- Formulario para Seleccionar Límites de Alumnos por Página -->
+        <form method="GET" action="" class="mb-3">
             <label for="limit">Alumnos por página:</label>
             <select name="limit" id="limit" onchange="this.form.submit()">
                 <option value="5" <?php if ($limit == 5) echo 'selected'; ?>>5</option>
                 <option value="10" <?php if ($limit == 10) echo 'selected'; ?>>10</option>
                 <option value="20" <?php if ($limit == 20) echo 'selected'; ?>>20</option>
             </select>
+        </form>
+        <!-- Fin del Formulario para Seleccionar Límites -->
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Correo</th>
-                    <th>Matricula</th>
+                    <th>Matrícula</th>
                     <th>Curso</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,10 +140,30 @@ $result = mysqli_stmt_get_result($stmt);
                     <td><?php echo htmlspecialchars($row['correo_usuario']); ?></td>
                     <td><?php echo htmlspecialchars($row['username_usuario']); ?></td>
                     <td><?php echo htmlspecialchars($row['nombre_curso']); ?></td>
+                    <td>
+                        <!-- Formulario para Editar Alumno -->
+                        <form method="POST" action="./private/editar_alumno.php" style="display:inline;">
+                            <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                            <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                        </form> 
+
+                        <!-- Formulario para Eliminar Alumno -->
+                        <form method="POST" action="./private/eliminar_alumno.php" style="display:inline;">
+                            <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+
+                        <!-- Formulario para Ver/Editar Notas -->
+                        <form method="POST" action="./private/editar_notas.php" style="display:inline;">
+                            <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                            <button type="submit" class="btn btn-info btn-sm">Ver/Editar Notas</button>
+                        </form>
+                    </td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+        <!-- Fin de la Lista de Alumnos -->
     </div>
 </body>
-</html> 
+</html>
