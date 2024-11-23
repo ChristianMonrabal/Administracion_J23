@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_alumno'])) {
     // Obtener datos del alumno para mostrar en el formulario
     $id_alumno = $_POST['id_alumno'];
     $query = "SELECT nombre_alumno, apellido_alumno, matricula_alumno, correo_alumno, id_curso 
-              FROM alumnos 
-              WHERE id_alumno = ?";
+            FROM alumnos 
+            WHERE id_alumno = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "i", $id_alumno);
     mysqli_stmt_execute($stmt);
