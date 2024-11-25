@@ -16,11 +16,11 @@ CREATE TABLE alumnos (
     id_alumno INT AUTO_INCREMENT PRIMARY KEY,
     nombre_alumno VARCHAR(50) NOT NULL,
     apellido_alumno VARCHAR(50) NOT NULL,
-    matricula_alumno VARCHAR(20) NOT NULL UNIQUE,
     correo_alumno VARCHAR(50) NOT NULL UNIQUE,
     id_curso INT NOT NULL,
     FOREIGN KEY (id_curso) REFERENCES cursos(id_curso)
 );
+
 
 CREATE TABLE cursos (
     id_curso INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,12 +48,12 @@ INSERT INTO cursos (nombre_curso) VALUES
 ('DAW2'),
 ('DAM2');
 
-INSERT INTO alumnos (nombre_alumno, apellido_alumno, matricula_alumno, correo_alumno, id_curso) VALUES
-('Ana', 'García', 'A001', 'ana.garcia@escuela.edu', 1),
-('Luis', 'Martínez', 'A002', 'luis.martinez@escuela.edu', 2),
-('María', 'López', 'A003', 'maria.lopez@escuela.edu', 3),
-('Carlos', 'Hernández', 'A004', 'carlos.hernandez@escuela.edu', 4),
-('Laura', 'González', 'A005', 'laura.gonzalez@escuela.edu', 1);
+INSERT INTO alumnos (nombre_alumno, apellido_alumno, correo_alumno, id_curso) VALUES
+('Ana', 'García', 'ana.garcia@escuela.edu', 1),
+('Luis', 'Martínez', 'luis.martinez@escuela.edu', 2),
+('María', 'López', 'maria.lopez@escuela.edu', 3),
+('Carlos', 'Hernández', 'carlos.hernandez@escuela.edu', 4),
+('Laura', 'González', 'laura.gonzalez@escuela.edu', 1);
 
 -- Inserts de ejemplo para las notas
 INSERT INTO notas (id_alumno, asignatura, nota) VALUES

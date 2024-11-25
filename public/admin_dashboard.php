@@ -6,47 +6,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') 
     exit();
 }
 
-include("./db/conexion.php");
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_alumno'])) {
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
-    $matricula = $_POST['matricula'];
-    $correo = $_POST['correo'];
-    $curso = $_POST['curso'];
-
-    $insertQuery = "INSERT INTO alumnos (nombre_alumno, apellido_alumno, matricula_alumno, correo_alumno, id_curso) VALUES (?, ?, ?, ?, ?)";
-    $stmt = mysqli_prepare($conn, $insertQuery);
-    mysqli_stmt_bind_param($stmt, "ssssi", $nombre, $apellido, $matricula, $correo, $curso);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
-    header("Location: admin_dashboard.php");
-    exit();
-}
-
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
-
-$query = "
-    SELECT 
-        a.id_alumno, 
-        a.nombre_alumno AS nombre_usuario, 
-        a.apellido_alumno AS apellido_usuario, 
-        a.matricula_alumno AS username_usuario, 
-        a.correo_alumno AS correo_usuario, 
-        c.nombre_curso 
-    FROM 
-        alumnos a
-    JOIN 
-        cursos c ON a.id_curso = c.id_curso
-    LIMIT ? OFFSET ?";
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+include("../db/conexion.php");
+include("../private/select_dashboard.php");
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -66,9 +29,7 @@ $result = mysqli_stmt_get_result($stmt);
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crearAlumnoModal">
-                            Crear Alumno
-                        </button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crearAlumnoModal">Crear Alumno</button>
                     </li>
                     <li class="nav-item dropdown ml-3">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,7 +55,7 @@ $result = mysqli_stmt_get_result($stmt);
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="POST" action="admin_dashboard.php">
+                <form method="POST" action="../private/add_alumno.php">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
@@ -103,10 +64,6 @@ $result = mysqli_stmt_get_result($stmt);
                         <div class="form-group">
                             <label for="apellido">Apellido:</label>
                             <input type="text" name="apellido" id="apellido" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="matricula">Matrícula:</label>
-                            <input type="text" name="matricula" id="matricula" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo:</label>
@@ -142,7 +99,6 @@ $result = mysqli_stmt_get_result($stmt);
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Correo</th>
-                        <th>Matrícula</th>
                         <th>Curso</th>
                         <th>Acciones</th>
                     </tr>
@@ -153,20 +109,19 @@ $result = mysqli_stmt_get_result($stmt);
                         <td><?php echo htmlspecialchars($row['nombre_usuario']); ?></td>
                         <td><?php echo htmlspecialchars($row['apellido_usuario']); ?></td>
                         <td><?php echo htmlspecialchars($row['correo_usuario']); ?></td>
-                        <td><?php echo htmlspecialchars($row['username_usuario']); ?></td>
                         <td><?php echo htmlspecialchars($row['nombre_curso']); ?></td>
                         <td>
-                            <form method="POST" action="./private/editar_alumno.php" style="display:inline;">
+                            <form method="POST" action="../private/editar_alumno.php" style="display:inline;">
                                 <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
                                 <button type="submit" class="btn btn-warning btn-sm">Editar</button>
                             </form> 
 
-                            <form method="POST" action="./private/eliminar_alumno.php" style="display:inline;">
+                            <form method="POST" action="../private/delete_alumno.php" style="display:inline;">
                                 <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                             </form>
 
-                            <form method="POST" action="./private/editar_notas.php" style="display:inline;">
+                            <form method="POST" action="../private/editar_notas.php" style="display:inline;">
                                 <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
                                 <button type="submit" class="btn btn-info btn-sm">Ver/Editar Notas</button>
                             </form>

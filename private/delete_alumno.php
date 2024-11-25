@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_alumno'])) {
         // Confirmar transacción
         mysqli_commit($conn);
 
-        header("Location: ./admin_dashboard.php");
+        header("Location: ../public/admin_dashboard.php");
         exit();
     } catch (Exception $e) {
         // Revertir transacción en caso de error
