@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') {
-    header("Location: ./public/signin.php");
+    header("Location: ../public/signin.php");
     exit();
 }
 

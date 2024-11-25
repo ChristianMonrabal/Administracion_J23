@@ -49,11 +49,32 @@ INSERT INTO cursos (nombre_curso) VALUES
 ('DAM2');
 
 INSERT INTO alumnos (nombre_alumno, apellido_alumno, correo_alumno, id_curso) VALUES
-('Ana', 'García', 'ana.garcia@escuela.edu', 1),
-('Luis', 'Martínez', 'luis.martinez@escuela.edu', 2),
-('María', 'López', 'maria.lopez@escuela.edu', 3),
-('Carlos', 'Hernández', 'carlos.hernandez@escuela.edu', 4),
-('Laura', 'González', 'laura.gonzalez@escuela.edu', 1);
+('Ana', 'García', 'ana.garcia@fje.edu', 1),
+('Luis', 'Martínez', 'luis.martinez@fje.edu', 2),
+('María', 'López', 'maria.lopez@fje.edu', 3),
+('Carlos', 'Hernández', 'carlos.hernandez@fje.edu', 4),
+('Laura', 'González', 'laura.gonzalez@fje.edu', 1),
+('Pedro', 'Sánchez', 'pedro.sanchez@fje.edu', 2),
+('Ana', 'Pérez', 'ana.perez@fje.edu', 3),
+('Javier', 'Torres', 'javier.torres@fje.edu', 4),
+('Marta', 'Ramírez', 'marta.ramirez@fje.edu', 1),
+('Antonio', 'Ruiz', 'antonio.ruiz@fje.edu', 2),
+('Beatriz', 'Díaz', 'beatriz.diaz@fje.edu', 3),
+('David', 'Jiménez', 'david.jimenez@fje.edu', 4),
+('Carmen', 'Gutiérrez', 'carmen.gutierrez@fje.edu', 1),
+('José', 'Vázquez', 'jose.vazquez@fje.edu', 2),
+('Isabel', 'Fernández', 'isabel.fernandez@fje.edu', 3),
+('Juan', 'Moreno', 'juan.moreno@fje.edu', 4),
+('Raquel', 'Muñoz', 'raquel.munoz@fje.edu', 1),
+('Francisco', 'Serrano', 'francisco.serrano@fje.edu', 2),
+('Susana', 'Álvarez', 'susana.alvarez@fje.edu', 3),
+('Manuel', 'Castro', 'manuel.castro@fje.edu', 4),
+('Julia', 'Soler', 'julia.soler@fje.edu', 1),
+('Ricardo', 'Martín', 'ricardo.martin@fje.edu', 2),
+('Elena', 'Molina', 'elena.molina@fje.edu', 3),
+('Felipe', 'Navarro', 'felipe.navarro@fje.edu', 4),
+('Cristina', 'Giménez', 'cristina.gimenez@fje.edu', 1);
+
 
 -- Inserts de ejemplo para las notas
 INSERT INTO notas (id_alumno, asignatura, nota) VALUES
