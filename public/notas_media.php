@@ -7,21 +7,15 @@ include("../private/notas_media_logic.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Mitjanes per Matèria</title>
+    <title>Notas Media</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="admin_dashboard.php">Administració J23</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crearAlumnoModal">Crear Alumno</button>
-                    </li>
                     <li class="nav-item dropdown ml-3">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
@@ -38,12 +32,21 @@ include("../private/notas_media_logic.php");
     </nav>
 
     <div class="container mt-5">
-        <h2>Notes Mitjanes per Matèria</h2>
-        <table class="table">
-            <thead>
+    <h2>Asignatura con Nota Media Más Alta</h3>
+        <p style="font-size: 1.5rem; font-weight: normal;">
+            <?php if ($materiaAlta): ?>
+                <?php echo htmlspecialchars($materiaAlta['asignatura']) . " - " . number_format($materiaAlta['nota_media'], 2); ?>
+            <?php else: ?>
+                No hay datos disponibles.
+            <?php endif; ?>
+        </p>
+        
+        <h2>Notas Media por Asignatura</h2>
+        <table class="table table-striped table-bordered text-center">
+            <thead class="thead-dark">
                 <tr>
-                    <th>Assignatura</th>
-                    <th>Nota Mitjana</th>
+                    <th>Asignatura</th>
+                    <th>Nota Media</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,21 +59,12 @@ include("../private/notas_media_logic.php");
             </tbody>
         </table>
 
-        <h3>Assignatura amb Nota Mitjana Més Alta</h3>
-        <p>
-            <?php if ($materiaAlta): ?>
-                <?php echo htmlspecialchars($materiaAlta['asignatura']) . " - " . number_format($materiaAlta['nota_media'], 2); ?>
-            <?php else: ?>
-                No hi ha dades disponibles.
-            <?php endif; ?>
-        </p>
-
-        <h3>Millors Notes per Assignatura</h3>
-        <table class="table">
-            <thead>
+        <h3>Mejores Notas por Asignatura</h3>
+        <table class="table table-striped table-bordered text-center">
+            <thead class="thead-dark">
                 <tr>
-                    <th>Assignatura</th>
-                    <th>Alumne</th>
+                    <th>Asignatura</th>
+                    <th>Alumno</th>
                     <th>Nota</th>
                 </tr>
             </thead>
