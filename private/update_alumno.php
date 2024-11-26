@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
         // Ejecutar la declaración
         if (mysqli_stmt_execute($stmt)) {
             // Si se actualiza correctamente, redirigir o mostrar un mensaje de éxito
-            header("Location: ../public/admin_dashboard.php?mensaje=Alumno actualizado con éxito.");
+            header("Location: ../public/admin_dashboard.php");
             exit();
         } else {
             // Si ocurre un error, mostrar mensaje de error
