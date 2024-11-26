@@ -34,15 +34,9 @@ $hayFiltros = !empty($apellido) || !empty($curso);
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container-fluid">
-        <!-- Título alineado a la izquierda -->
         <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
-        
-        <!-- Formulario de Filtros -->
         <form class="form-inline ml-3" method="GET" action="admin_dashboard.php">
-            <!-- Filtro por Apellido -->
             <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Apellido" name="apellido" value="<?php echo htmlspecialchars($_GET['apellido'] ?? ''); ?>" aria-label="Buscar">
-            
-            <!-- Filtro por Curso -->
             <select class="form-control mx-2" name="curso" aria-label="Seleccionar curso">
                 <option value="">Seleccionar curso</option>
                 <?php while ($curso = mysqli_fetch_assoc($resultCursos)): ?>
@@ -51,11 +45,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
                     </option>
                 <?php endwhile; ?>
             </select>
-            
-            <!-- Botón de Filtrar -->
             <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Filtrar</button>
-
-            <!-- Botón de Borrar Filtros, solo si hay filtros activos -->
             <?php if (!empty($_GET['apellido']) || !empty($_GET['curso'])): ?>
                 <a href="admin_dashboard.php" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Borrar Filtros</a>
             <?php endif; ?>
@@ -87,8 +77,6 @@ $hayFiltros = !empty($apellido) || !empty($curso);
         </div>
     </div>
 </nav>
-
-
 
     <!-- Modal para Crear Alumno -->
     <div class="modal fade" 

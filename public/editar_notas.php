@@ -12,33 +12,27 @@ include("../private/editar_notas_logic.php");
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crearAlumnoModal">Crear Alumno</button>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="notas_media.php">Notas Media</a>
-                    </li>
-                    <li class="nav-item dropdown ml-3">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <form action="../private/logout.php" method="POST">
-                                <button type="submit" class="dropdown-item">Cerrar sesión</button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="btn btn-light"g href="notas_media.php">Notas Media</a>
+                </li>
+                <li class="nav-item dropdown ml-3">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <form action="../private/logout.php" method="POST">
+                            <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
     <div class="container mt-5">
         <h2>Editar Notas de <?php echo htmlspecialchars($nombre . ' ' . $apellido); ?></h2>
         <form method="POST" action="../private/editar_notas_logic.php">
