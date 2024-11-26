@@ -74,11 +74,7 @@ INSERT INTO notas (id_alumno, id_asignatura, nota) VALUES
 
 -- Inserts para la tabla usuarios
 INSERT INTO usuarios (nombre_usuario, apellido_usuario, username_usuario, password_usuario, tipo_usuario, DNI_usuario, correo_usuario) VALUES
-('Christian', 'Monrabal', 'cmonrabal', '$2b$12$hashExampleHash1', 'Conserjeria', '12345678A', 'cmonrabal@j23.edu'),
-('Juan Carlos', 'Prado', 'jcprado', '$2b$12$hashExampleHash2', 'Conserjeria', '87654321B', 'jcprado@j23.edu'),
-('Daniel', 'Becerra', 'dbecerra', '$2b$12$hashExampleHash3', 'Conserjeria', '45678901C', 'dbecerra@j23.edu'),
-('Sergi', 'Masip', 'smasip', '$2b$12$hashExampleHash4', 'Conserjeria', '32165498D', 'smasip@j23.edu'),
-('Richard', 'Owens', 'administrador', '$2b$12$hashExampleHash5', 'Administrador', '00000000X', 'administrador@j23.edu');
+('Richard', 'Owens', 'administrador', '$2b$12$gvjVuQbOv7d7Ya5VnLcbyu2EUeVxXlQppLZBtly9l3/1dsQm1ZTki', 'Administrador', '00000000X', 'administrador@j23.edu');
 
 INSERT INTO alumnos (nombre_alumno, apellido_alumno, correo_alumno, id_curso) VALUES
 ('Ana', 'García', 'ana.garcia@fje.edu', 1),
