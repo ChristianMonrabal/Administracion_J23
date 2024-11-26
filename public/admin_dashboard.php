@@ -17,6 +17,8 @@ $resultCursos = mysqli_query($conn, $filtro_cursos);
 $errors = $_SESSION['errors'] ?? [];
 $form_data = $_SESSION['form_data'] ?? [];
 unset($_SESSION['errors'], $_SESSION['form_data']);
+
+$hayFiltros = !empty($apellido) || !empty($curso);
 ?>
 
 <!DOCTYPE html>
@@ -31,11 +33,12 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <div class="container">
+    <div class="container-fluid">
+        <!-- Título alineado a la izquierda -->
         <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
         
         <!-- Formulario de Filtros -->
-        <form class="form-inline mx-3" method="GET" action="admin_dashboard.php">
+        <form class="form-inline ml-3" method="GET" action="admin_dashboard.php">
             <!-- Filtro por Apellido -->
             <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Apellido" name="apellido" value="<?php echo htmlspecialchars($_GET['apellido'] ?? ''); ?>" aria-label="Buscar">
             
@@ -67,6 +70,9 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
                 <li class="nav-item">
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#crearAlumnoModal">Crear Alumno</button>
                 </li>
+                <li class="nav-item">
+                    <a class="btn btn-light"g href="notas_media.php">Notas Media</a>
+                </li>
                 <li class="nav-item dropdown ml-3">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
@@ -81,6 +87,7 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
         </div>
     </div>
 </nav>
+
 
 
     <!-- Modal para Crear Alumno -->
@@ -183,7 +190,7 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
                                     <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                                 </form>
 
-                                <form method="POST" action="../private/editar_notas.php" style="display:inline;">
+                                <form method="POST" action="editar_notas.php" style="display:inline;">
                                     <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
                                     <button type="submit" class="btn btn-info btn-sm">Ver/Editar Notas</button>
                                 </form>
@@ -268,6 +275,8 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
     </div>
 </div>
 
+<!-- Este bloque solo se mostrará si no hay filtros activos -->
+<?php if (!$hayFiltros): ?>
     <div class="row justify-content-center mt-3">
         <div class="col-lg-6 col-md-8">
             <form method="GET" action="" class="form-inline justify-content-center">
@@ -280,6 +289,7 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
             </form>
         </div>
     </div>
+<?php endif; ?>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
