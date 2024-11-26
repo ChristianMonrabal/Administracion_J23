@@ -17,6 +17,8 @@ $resultCursos = mysqli_query($conn, $filtro_cursos);
 $errors = $_SESSION['errors'] ?? [];
 $form_data = $_SESSION['form_data'] ?? [];
 unset($_SESSION['errors'], $_SESSION['form_data']);
+
+$hayFiltros = !empty($apellido) || !empty($curso);
 ?>
 
 <!DOCTYPE html>
@@ -32,41 +34,49 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container">
+        <!-- Logo o Nombre de la Aplicación fuera del menú hamburguesa -->
         <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
         
-        <!-- Formulario de Filtros -->
-        <form class="form-inline mx-3" method="GET" action="admin_dashboard.php">
-            <!-- Filtro por Apellido -->
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Apellido" name="apellido" value="<?php echo htmlspecialchars($_GET['apellido'] ?? ''); ?>" aria-label="Buscar">
-            
-            <!-- Filtro por Curso -->
-            <select class="form-control mx-2" name="curso" aria-label="Seleccionar curso">
-                <option value="">Seleccionar curso</option>
-                <?php while ($curso = mysqli_fetch_assoc($resultCursos)): ?>
-                    <option value="<?php echo $curso['id_curso']; ?>" <?php echo (isset($_GET['curso']) && $_GET['curso'] == $curso['id_curso']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($curso['nombre_curso']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-            
-            <!-- Botón de Filtrar -->
-            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Filtrar</button>
-
-            <!-- Botón de Borrar Filtros, solo si hay filtros activos -->
-            <?php if (!empty($_GET['apellido']) || !empty($_GET['curso'])): ?>
-                <a href="admin_dashboard.php" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Borrar Filtros</a>
-            <?php endif; ?>
-        </form>
-
+        <!-- Botón para mostrar el menú en dispositivos móviles -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
+        <!-- Contenedor del menú que se colapsa en móviles -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
             <ul class="navbar-nav">
+                <!-- Formulario de Filtros dentro del menú hamburguesa -->
+                <li class="nav-item">
+                    <form class="form-inline mx-3" method="GET" action="admin_dashboard.php">
+                        <!-- Filtro por Apellido -->
+                        <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Apellido" name="apellido" value="<?php echo htmlspecialchars($_GET['apellido'] ?? ''); ?>" aria-label="Buscar">
+                        
+                        <!-- Filtro por Curso -->
+                        <select class="form-control mx-2" name="curso" aria-label="Seleccionar curso">
+                            <option value="">Seleccionar curso</option>
+                            <?php while ($curso = mysqli_fetch_assoc($resultCursos)): ?>
+                                <option value="<?php echo $curso['id_curso']; ?>" <?php echo (isset($_GET['curso']) && $_GET['curso'] == $curso['id_curso']) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($curso['nombre_curso']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                        
+                        <!-- Botón de Filtrar -->
+                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Filtrar</button>
+
+                        <!-- Botón de Borrar Filtros, solo si hay filtros activos -->
+                        <?php if (!empty($_GET['apellido']) || !empty($_GET['curso'])): ?>
+                            <a href="admin_dashboard.php" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Borrar Filtros</a>
+                        <?php endif; ?>
+                    </form>
+                </li>
+
+                <!-- Botón para Crear Alumno -->
                 <li class="nav-item">
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#crearAlumnoModal">Crear Alumno</button>
                 </li>
+
+                <!-- Dropdown para el usuario -->
                 <li class="nav-item dropdown ml-3">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
@@ -152,53 +162,57 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
     <br>
     <div class="row justify-content-center">
     <div class="col-lg-10 col-md-12">
-        <table class="table table-striped table-bordered text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Curso</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                // Verificar si el resultado tiene registros
-                if (mysqli_num_rows($result) > 0): 
-                    while ($row = mysqli_fetch_assoc($result)): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['nombre_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($row['apellido_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($row['correo_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($row['nombre_curso']); ?></td>
-                            <td>
-                                <form method="POST" action="" style="display:inline;">
-                                    <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
-                                    <button type="submit" class="btn btn-warning btn-sm" name="editar_alumno" data-toggle="modal" data-target="#editarAlumnoModal">Editar</button>
-                                </form>
-
-                                <form method="POST" action="../private/delete_alumno.php" style="display:inline;">
-                                    <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                </form>
-
-                                <form method="POST" action="../private/editar_notas.php" style="display:inline;">
-                                    <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
-                                    <button type="submit" class="btn btn-info btn-sm">Ver/Editar Notas</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; 
-                        else: ?>
+        <!-- Contenedor de la tabla con la clase table-responsive -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-center">
+                <thead class="thead-dark">
                     <tr>
-                        <td colspan="5">No se encontraron resultados para los filtros aplicados.</td>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Curso</th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php 
+                    // Verificar si el resultado tiene registros
+                    if (mysqli_num_rows($result) > 0): 
+                        while ($row = mysqli_fetch_assoc($result)): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['nombre_usuario']); ?></td>
+                                <td><?php echo htmlspecialchars($row['apellido_usuario']); ?></td>
+                                <td><?php echo htmlspecialchars($row['correo_usuario']); ?></td>
+                                <td><?php echo htmlspecialchars($row['nombre_curso']); ?></td>
+                                <td>
+                                    <form method="POST" action="" style="display:inline;">
+                                        <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                                        <button type="submit" class="btn btn-warning btn-sm" name="editar_alumno" data-toggle="modal" data-target="#editarAlumnoModal">Editar</button>
+                                    </form>
+
+                                    <form method="POST" action="../private/delete_alumno.php" style="display:inline;">
+                                        <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                    </form>
+
+                                    <form method="POST" action="../private/editar_notas.php" style="display:inline;">
+                                        <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                                        <button type="submit" class="btn btn-info btn-sm">Ver/Editar Notas</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endwhile; 
+                            else: ?>
+                        <tr>
+                            <td colspan="5">No se encontraron resultados para los filtros aplicados.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
 
 
 <!-- Modal para Editar Alumno -->
@@ -268,6 +282,8 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
     </div>
 </div>
 
+<!-- Este bloque solo se mostrará si no hay filtros activos -->
+<?php if (!$hayFiltros): ?>
     <div class="row justify-content-center mt-3">
         <div class="col-lg-6 col-md-8">
             <form method="GET" action="" class="form-inline justify-content-center">
@@ -280,6 +296,7 @@ unset($_SESSION['errors'], $_SESSION['form_data']);
             </form>
         </div>
     </div>
+<?php endif; ?>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
