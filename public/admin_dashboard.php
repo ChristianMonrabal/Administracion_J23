@@ -33,6 +33,9 @@ include("../private/show_data_alumno.php");
                     <li class="nav-item">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crearAlumnoModal">Crear Alumno</button>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="notas_media.php">Notas Media</a>
+                    </li>
                     <li class="nav-item dropdown ml-3">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
@@ -136,7 +139,7 @@ include("../private/show_data_alumno.php");
                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                             </form>
 
-                            <form method="POST" action="../private/editar_notas.php" style="display:inline;">
+                            <form method="POST" action="editar_notas.php" style="display:inline;">
                                 <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
                                 <button type="submit" class="btn btn-info btn-sm">Ver/Editar Notas</button>
                             </form>
