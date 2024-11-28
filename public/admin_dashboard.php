@@ -19,6 +19,26 @@ $form_data = $_SESSION['form_data'] ?? [];
 unset($_SESSION['errors'], $_SESSION['form_data']);
 
 $hayFiltros = !empty($apellido) || !empty($curso);
+
+// Mostrar SweetAlert si el usuario fue creado
+if (isset($_SESSION['usuario_creado']) && $_SESSION['usuario_creado'] === true) {
+    echo "<script src='../js/sweetalert.js'></script>";
+    echo "<script>alertaUsuarioCreado();</script>";
+    unset($_SESSION['usuario_creado']); // Limpiar la variable de sesión
+}
+
+// Mostrar SweetAlert si el usuario fue eliminado
+if (isset($_SESSION['usuario_eliminado']) && $_SESSION['usuario_eliminado'] === true) {
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script src='../js/eliminar.js'></script>";
+    echo "<script>alertaUsuarioEliminado();</script>";
+    unset($_SESSION['usuario_eliminado']); // Limpiar la variable de sesión
+}
+
+if (isset($_SESSION['error'])) {
+    echo "<script>alert('" . $_SESSION['error'] . "');</script>";
+    unset($_SESSION['error']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,9 +47,9 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
-    <link rel="shortcut icon" href="./img/icon.png" type="image/x-icon">
     <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
@@ -173,7 +193,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
                                     <button type="submit" class="btn btn-warning btn-sm" name="editar_alumno" data-toggle="modal" data-target="#editarAlumnoModal">Editar</button>
                                 </form>
 
-                                <form method="POST" action="../private/delete_alumno.php" style="display:inline;">
+                                <form method="POST" action="../private/delete_alumno.php" style="display:inline;" onsubmit="return confirmarEliminacion(event, this);">
                                     <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
                                     <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                                 </form>
@@ -283,5 +303,21 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="../js/edit_modal.js"></script>
+    <script>
+        // Mostrar el modal si hay errores en el formulario
+        $(document).ready(function() {
+            if ($('#crearAlumnoModal').data('open') === 'true') {
+                $('#crearAlumnoModal').modal('show');
+            }
+        });
+    </script>
+    <?php
+    // Asegúrate de que esta parte está al final del archivo, antes de cerrar el tag </body>
+    if (isset($_SESSION['usuario_eliminado']) && $_SESSION['usuario_eliminado'] === true) {
+        echo "<script>document.addEventListener('DOMContentLoaded', function() { alertaUsuarioEliminado(); });</script>";
+        unset($_SESSION['usuario_eliminado']);
+    }
+    ?>
+    <script src="../js/eliminar.js"></script>
 </body>
 </html>
