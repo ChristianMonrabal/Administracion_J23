@@ -57,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_alumno'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
-        $_SESSION['usuario_creado'] = true;
         header("Location: ../public/admin_dashboard.php");
         exit();
     } else {
@@ -68,3 +67,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_alumno'])) {
     }
 }
 ?>
+
