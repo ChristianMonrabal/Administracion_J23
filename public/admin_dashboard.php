@@ -167,31 +167,33 @@ if (isset($_SESSION['error'])) {
     <br>
     <div class="row justify-content-center">
     <div class="col-lg-10 col-md-12">
-        <table class="table table-striped table-bordered text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Curso</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                // Verificar si el resultado tiene registros
-                if (mysqli_num_rows($result) > 0): 
-                    while ($row = mysqli_fetch_assoc($result)): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['nombre_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($row['apellido_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($row['correo_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($row['nombre_curso']); ?></td>
-                            <td>
-                                <form method="POST" action="" style="display:inline;">
-                                    <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
-                                    <button type="submit" class="btn btn-warning btn-sm" name="editar_alumno" data-toggle="modal" data-target="#editarAlumnoModal">Editar</button>
-                                </form>
+        <!-- Contenedor de la tabla con la clase table-responsive -->
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Curso</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    // Verificar si el resultado tiene registros
+                    if (mysqli_num_rows($result) > 0): 
+                        while ($row = mysqli_fetch_assoc($result)): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['nombre_usuario']); ?></td>
+                                <td><?php echo htmlspecialchars($row['apellido_usuario']); ?></td>
+                                <td><?php echo htmlspecialchars($row['correo_usuario']); ?></td>
+                                <td><?php echo htmlspecialchars($row['nombre_curso']); ?></td>
+                                <td>
+                                    <form method="POST" action="" style="display:inline;">
+                                        <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
+                                        <button type="submit" class="btn btn-warning btn-sm" name="editar_alumno" data-toggle="modal" data-target="#editarAlumnoModal">Editar</button>
+                                    </form>
 
                                 <form method="POST" action="../private/delete_alumno.php" style="display:inline;" onsubmit="return confirmarEliminacion(event, this);">
                                     <input type="hidden" name="id_alumno" value="<?php echo $row['id_alumno']; ?>">
@@ -285,6 +287,8 @@ if (isset($_SESSION['error'])) {
 
 <!-- Este bloque solo se mostrará si no hay filtros activos -->
 <?php if (!$hayFiltros): ?>
+<!-- Este bloque solo se mostrará si no hay filtros activos -->
+<?php if (!$hayFiltros): ?>
     <div class="row justify-content-center mt-3">
         <div class="col-lg-6 col-md-8">
             <form method="GET" action="" class="form-inline justify-content-center">
@@ -297,6 +301,7 @@ if (isset($_SESSION['error'])) {
             </form>
         </div>
     </div>
+<?php endif; ?>
 <?php endif; ?>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
