@@ -8,7 +8,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') 
 
 include("../db/conexion.php");
 
-$errors = [];
+// Variables de error individuales
+$nombreError = '';
+$apellidoError = '';
+$correoError = '';
+$cursoError = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
     $idAlumno = intval($_POST['id_alumno']);
@@ -19,27 +23,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
 
     // Validación de los campos
     if (empty($nombre)) {
-        $errors['nombre'] = "El nombre es obligatorio.";
+        $nombreError = "El nombre es obligatorio.";
     }
 
     if (empty($apellido)) {
-        $errors['apellido'] = "El apellido es obligatorio.";
+        $apellidoError = "El apellido es obligatorio.";
     }
 
     if (empty($correo)) {
-        $errors['correo'] = "El correo es obligatorio.";
+        $correoError = "El correo es obligatorio.";
     } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        $errors['correo'] = "El correo debe ser válido.";
-    } elseif (!preg_match('/@jfe\.edu$/', $correo)) {
-        $errors['correo'] = "El correo debe tener el dominio @jfe.edu.";
+        $correoError = "El correo debe ser válido.";
+    } elseif (!preg_match('/@fje\.edu$/', $correo)) {
+        $correoError = "El correo debe tener el dominio @fje.edu";
     }
 
     if (empty($curso)) {
-        $errors['curso'] = "El curso es obligatorio.";
+        $cursoError = "El curso es obligatorio.";
     }
 
     // Si no hay errores, actualizar el alumno en la base de datos
-    if (empty($errors)) {
+    if (empty($nombreError) && empty($apellidoError) && empty($correoError) && empty($cursoError)) {
         $updateQuery = "UPDATE alumnos SET nombre_alumno = ?, apellido_alumno = ?, correo_alumno = ?, id_curso = ? WHERE id_alumno = ?";
         $stmt = mysqli_prepare($conn, $updateQuery);
         mysqli_stmt_bind_param($stmt, "sssii", $nombre, $apellido, $correo, $curso, $idAlumno);
@@ -49,12 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
         header("Location: ../public/admin_dashboard.php");
         exit();
     } else {
-        // Redireccionar con errores a la página de administración
-        $_SESSION['errors'] = $errors;
+        // Redirigir con los errores a la página de administración
+        $_SESSION['nombreError'] = $nombreError;
+        $_SESSION['apellidoError'] = $apellidoError;
+        $_SESSION['correoError'] = $correoError;
+        $_SESSION['cursoError'] = $cursoError;
         $_SESSION['form_data'] = $_POST;
         header("Location: ../public/admin_dashboard.php");
         exit();
     }
 }
-
 ?>

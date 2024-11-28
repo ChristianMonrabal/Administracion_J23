@@ -174,3 +174,72 @@ a:hover {
         margin: 0 auto;
     }
 }
+
+@media (max-width: 800px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .slider {
+        width: 100%;
+        height: 50vh;
+    }
+
+    .login-form {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .login-form h2 {
+        font-size: 28px;
+    }
+
+    .imgicon {
+        width: 80px;
+        top: 10%;
+        right: 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .slider {
+        display: none;
+    }
+
+    .login-form {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .login-form h2 {
+        font-size: 24px;
+    }
+
+    .imgicon {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-form h2 {
+        font-size: 20px;
+    }
+
+    .login-form input, .login-form button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .imgicon {
+        width: 60px;
+    }
+}
