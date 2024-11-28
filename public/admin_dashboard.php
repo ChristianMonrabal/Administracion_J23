@@ -22,7 +22,13 @@ $hayFiltros = !empty($apellido) || !empty($curso);
 
 // Mostrar SweetAlert si el usuario fue creado
 if (isset($_SESSION['usuario_creado']) && $_SESSION['usuario_creado'] === true) {
-    echo "<script>document.addEventListener('DOMContentLoaded', function() { alertaUsuarioCreado(); });</script>";
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script src='../js/sweetalert.js'></script>";
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alertaUsuarioCreado();
+        });
+    </script>";
     unset($_SESSION['usuario_creado']); // Limpiar la variable de sesión
 }
 
