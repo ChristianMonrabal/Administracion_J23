@@ -7,7 +7,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') 
 include("../db/conexion.php");
 
 // Determinar cuántos alumnos hay en total
-$totalQuery = "SELECT COUNT(*) as total FROM alumnos";
+$totalQuery = "SELECT COUNT(*) as total 
+                FROM alumnos a
+                JOIN cursos c ON a.id_curso = c.id_curso"; // Agregado el JOIN con la tabla cursos
 $whereClauses = [];
 $params = [];
 $types = "";
@@ -17,12 +19,13 @@ $apellido = isset($_GET['apellido']) ? $_GET['apellido'] : '';
 $curso = isset($_GET['curso']) ? $_GET['curso'] : '';
 
 if (!empty($apellido)) {
-    $whereClauses[] = "apellido_alumno LIKE ?";
+    $whereClauses[] = "a.apellido_alumno LIKE ?"; // Asegúrate de usar el alias a para todas las columnas de la tabla alumnos
     $params[] = "%$apellido%";
     $types .= "s";
 }
+
 if (!empty($curso)) {
-    $whereClauses[] = "id_curso = ?";
+    $whereClauses[] = "a.id_curso = ?";  // Usando el alias a para la columna id_curso
     $params[] = $curso;
     $types .= "s";
 }
@@ -54,11 +57,6 @@ $query = "SELECT a.id_alumno, a.nombre_alumno AS nombre_usuario, a.apellido_alum
         JOIN cursos c ON a.id_curso = c.id_curso";
 
 if (count($whereClauses) > 0) {
-    // Calificar "id_curso" para evitar ambigüedad
-    $whereClauses = array_map(function($clause) {
-        return str_replace("id_curso", "a.id_curso", $clause);
-    }, $whereClauses);
-
     $query .= " WHERE " . implode(" AND ", $whereClauses);
 }
 $query .= " ORDER BY a.id_alumno DESC LIMIT ? OFFSET ?";
@@ -71,5 +69,4 @@ $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
-
 ?>
