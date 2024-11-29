@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') 
 include("../db/conexion.php");
 include("../private/select_dashboard.php");
 include("../private/show_data_alumno.php");
-include_once "../private/sweet_alert.php";
+include "../private/sweet_alert.php";
 
 $filtro_cursos = "SELECT id_curso, nombre_curso FROM cursos";
 $resultCursos = mysqli_query($conn, $filtro_cursos);
@@ -47,7 +47,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
                 <?php endwhile; ?>
             </select>
             <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Filtrar</button>
-            <?php if (!empty($_GET['apellido']) || !empty($_GET['curso'])): ?>
+            <?php if (!empty($_GET['apellido']) || !empty($_GET['correo']) || !empty($_GET['curso'])): ?>
                 <a href="admin_dashboard.php" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Borrar Filtros</a>
             <?php endif; ?>
         </form>
@@ -315,5 +315,6 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <script src="../js/edit_modal.js"></script>
     <script src="../js/create_modal.js"></script>
     <script src="../js/eliminar.js"></script>
+    <script src="../js/sweet_alert.js"></script>
 </body>
 </html>
