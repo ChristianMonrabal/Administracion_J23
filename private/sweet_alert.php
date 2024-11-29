@@ -2,7 +2,7 @@
 // Mostrar SweetAlert si el usuario fue creado
 if (isset($_SESSION['usuario_creado']) && $_SESSION['usuario_creado'] === true) {
     echo "<script src='../js/sweetalert.js'></script>";
-    echo "<script>alertaUsuarioCreado();</script>";
+    echo "<script>document.addEventListener('DOMContentLoaded', function() { alertaUsuarioCreado(); });</script>";
     unset($_SESSION['usuario_creado']); // Limpiar la variable de sesión
 }
 
