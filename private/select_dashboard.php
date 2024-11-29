@@ -50,13 +50,19 @@ $offset = ($page - 1) * $limit;
 // Consulta para obtener los alumnos paginados
 $query = "SELECT a.id_alumno, a.nombre_alumno AS nombre_usuario, a.apellido_alumno AS apellido_usuario, 
                 a.correo_alumno AS correo_usuario, c.nombre_curso
-                FROM alumnos a
-                giJOIN cursos c ON a.id_curso = c.id_curso";
+        FROM alumnos a
+        JOIN cursos c ON a.id_curso = c.id_curso";
 
 if (count($whereClauses) > 0) {
+    // Calificar "id_curso" para evitar ambigüedad
+    $whereClauses = array_map(function($clause) {
+        return str_replace("id_curso", "a.id_curso", $clause);
+    }, $whereClauses);
+
     $query .= " WHERE " . implode(" AND ", $whereClauses);
 }
 $query .= " ORDER BY a.id_alumno DESC LIMIT ? OFFSET ?";
+
 $params[] = $limit;
 $params[] = $offset;
 $types .= "ii";
@@ -65,4 +71,5 @@ $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
+
 ?>
