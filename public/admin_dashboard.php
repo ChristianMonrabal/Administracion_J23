@@ -281,6 +281,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
 <?php endif; ?>
 
 <!-- Paginación -->
+<?php if (!$hayFiltros): ?>
 <nav aria-label="Page navigation" class="mt-3">
     <ul class="pagination justify-content-center">
         <?php if ($page > 1): ?>
@@ -306,6 +307,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
         <?php endif; ?>
     </ul>
 </nav>
+<?php endif; ?>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
