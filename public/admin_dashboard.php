@@ -123,6 +123,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
                         <div class="form-group">
                             <label for="curso">Curso:</label>
                             <select name="curso" id="curso" class="form-control">
+                                <option value="" disabled selected>Seleccionar curso</option> <!-- Opción por defecto -->
                                 <?php
                                 $cursosQuery = "SELECT id_curso, nombre_curso FROM cursos";
                                 $cursosResult = mysqli_query($conn, $cursosQuery);
