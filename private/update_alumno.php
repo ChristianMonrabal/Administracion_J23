@@ -50,6 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
+        // Limpiar los datos del formulario y los errores de la sesión
+        unset($_SESSION['form_data']);
+        unset($_SESSION['nombreError']);
+        unset($_SESSION['apellidoError']);
+        unset($_SESSION['correoError']);
+        unset($_SESSION['cursoError']);
+
         header("Location: ../public/admin_dashboard.php");
         exit();
     } else {
@@ -58,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar_cambios'])) {
         $_SESSION['apellidoError'] = $apellidoError;
         $_SESSION['correoError'] = $correoError;
         $_SESSION['cursoError'] = $cursoError;
-        $_SESSION['form_data'] = $_POST;
+        $_SESSION['form_data'] = $_POST; // Guardar los datos del formulario
+
         header("Location: ../public/admin_dashboard.php");
         exit();
     }

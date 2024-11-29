@@ -80,22 +80,22 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     </div>
 </nav>
 
-    <!-- Modal para Crear Alumno -->
-    <div class="modal fade" 
-        id="crearAlumnoModal" 
-        tabindex="-1" 
-        role="dialog" 
-        aria-labelledby="crearAlumnoModalLabel" 
-        aria-hidden="true" 
+     <!-- Modal para Crear Alumno -->
+     <div class="modal fade"
+        id="crearAlumnoModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="crearAlumnoModalLabel"
+        aria-hidden="true"
         data-open="<?php echo !empty($errors) ? 'true' : 'false'; ?>">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="crearAlumnoModalLabel">Crear Alumno</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <form method="POST" action="../private/add_alumno.php">
                     <div class="modal-body">
@@ -123,7 +123,6 @@ $hayFiltros = !empty($apellido) || !empty($curso);
                         <div class="form-group">
                             <label for="curso">Curso:</label>
                             <select name="curso" id="curso" class="form-control">
-                                <option value="" disabled selected>Seleccionar curso</option>
                                 <?php
                                 $cursosQuery = "SELECT id_curso, nombre_curso FROM cursos";
                                 $cursosResult = mysqli_query($conn, $cursosQuery);
@@ -199,72 +198,90 @@ $hayFiltros = !empty($apellido) || !empty($curso);
 </div>
 
 
-<!-- Modal para Editar Alumno -->
-<div class="modal fade" id="editarAlumnoModal" tabindex="-1" role="dialog" aria-labelledby="editarAlumnoModalLabel" aria-hidden="true" 
-    data-open="<?php echo !empty($alumnoSeleccionado) ? 'true' : 'false'; ?>">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editarAlumnoModalLabel">Editar Alumno</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+   <!-- Modal para Editar Alumno -->
+   <div class="modal fade" id="editarAlumnoModal" tabindex="-1" role="dialog" aria-labelledby="editarAlumnoModalLabel" aria-hidden="true"
+        data-open="<?php echo !empty($alumnoSeleccionado) ? 'true' : 'false'; ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarAlumnoModalLabel">Editar Alumno</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" id="editarAlumnoForm" action="../private/update_alumno.php">
+                    <div class="modal-body">
+                        <input type="hidden" name="id_alumno" value="<?php echo htmlspecialchars($alumnoSeleccionado['id_alumno'] ?? ''); ?>">
+
+                        <!-- Nombre -->
+                        <div class="form-group">
+                            <label for="editar_nombre">Nombre:</label>
+                            <input
+                                type="text"
+                                name="nombre"
+                                id="editar_nombre"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($alumnoSeleccionado['nombre_alumno'] ?? ''); ?>">
+                            <?php if (isset($_SESSION['nombreError'])): ?>
+                                <small class="text-danger"><?php echo $_SESSION['nombreError']; ?></small>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Apellido -->
+                        <div class="form-group">
+                            <label for="editar_apellido">Apellido:</label>
+                            <input
+                                type="text"
+                                name="apellido"
+                                id="editar_apellido"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($alumnoSeleccionado['apellido_alumno'] ?? ''); ?>">
+                            <?php if (isset($_SESSION['apellidoError'])): ?>
+                                <small class="text-danger"><?php echo $_SESSION['apellidoError']; ?></small>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="form-group">
+                            <label for="editar_correo">Correo:</label>
+                            <input
+                                type="email"
+                                name="correo"
+                                id="editar_correo"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($alumnoSeleccionado['correo_alumno'] ?? ''); ?>">
+                            <?php if (isset($_SESSION['correoError'])): ?>
+                                <small class="text-danger"><?php echo $_SESSION['correoError']; ?></small>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Curso -->
+                        <div class="form-group">
+                            <label for="editar_curso">Curso:</label>
+                            <select name="curso" id="editar_curso" class="form-control">
+                                <?php
+                                $cursosQuery = "SELECT id_curso, nombre_curso FROM cursos";
+                                $cursosResult = mysqli_query($conn, $cursosQuery);
+                                while ($curso = mysqli_fetch_assoc($cursosResult)) {
+                                    $selected = isset($alumnoSeleccionado['id_curso']) && $alumnoSeleccionado['id_curso'] == $curso['id_curso'] ? 'selected' : '';
+                                    echo "<option value='{$curso['id_curso']}' $selected>{$curso['nombre_curso']}</option>";
+                                }
+                                ?>
+                            </select>
+                            <?php if (isset($_SESSION['cursoError'])): ?>
+                                <small class="text-danger"><?php echo $_SESSION['cursoError']; ?></small>
+                            <?php endif; ?>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" name="guardar_cambios" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
             </div>
-            <form method="POST" action="../private/update_alumno.php">
-                <div class="modal-body">
-                    <input type="hidden" name="id_alumno" value="<?php echo $alumnoSeleccionado['id_alumno'] ?? ''; ?>">
-                    <div class="form-group">
-                        <label for="editar_nombre">Nombre:</label>
-                        <input 
-                            type="text" 
-                            name="nombre" 
-                            id="editar_nombre" 
-                            class="form-control" 
-                            value="<?php echo htmlspecialchars($alumnoSeleccionado['nombre_alumno'] ?? ''); ?>" 
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editar_apellido">Apellido:</label>
-                        <input 
-                            type="text" 
-                            name="apellido" 
-                            id="editar_apellido" 
-                            class="form-control" 
-                            value="<?php echo htmlspecialchars($alumnoSeleccionado['apellido_alumno'] ?? ''); ?>" 
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editar_correo">Correo:</label>
-                        <input 
-                            type="email" 
-                            name="correo" 
-                            id="editar_correo" 
-                            class="form-control" 
-                            value="<?php echo htmlspecialchars($alumnoSeleccionado['correo_alumno'] ?? ''); ?>" 
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editar_curso">Curso:</label>
-                        <select name="curso" id="editar_curso" class="form-control" required>
-                            <?php
-                            $cursosQuery = "SELECT id_curso, nombre_curso FROM cursos";
-                            $cursosResult = mysqli_query($conn, $cursosQuery);
-                            while ($curso = mysqli_fetch_assoc($cursosResult)) {
-                                $selected = isset($alumnoSeleccionado['id_curso']) && $alumnoSeleccionado['id_curso'] == $curso['id_curso'] ? 'selected' : '';
-                                echo "<option value='{$curso['id_curso']}' $selected>{$curso['nombre_curso']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" name="guardar_cambios" class="btn btn-primary">Guardar Cambios</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
 <!-- Este bloque solo se mostrará si no hay filtros activos -->
 <?php if (!$hayFiltros): ?>
@@ -318,5 +335,6 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <script src="../js/create_modal.js"></script>
     <script src="../js/eliminar.js"></script>
     <script src="../js/sweet_alert.js"></script>
+    <script src="../js/validate_add_update.js"></script>
 </body>
 </html>
