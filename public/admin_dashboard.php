@@ -31,6 +31,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/cerrarsesion.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
@@ -69,8 +70,8 @@ $hayFiltros = !empty($apellido) || !empty($curso);
                         <?php echo htmlspecialchars($_SESSION['nombre']) . " " . htmlspecialchars($_SESSION['apellido']); ?>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <form action="../private/logout.php" method="POST">
-                            <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                        <form id="logoutForm" action="../private/logout.php" method="POST" onsubmit="return false;">
+                            <button type="button" class="dropdown-item" onclick="cerrarSesion()">Cerrar sesión</button>
                         </form>
                     </div>
                 </li>
