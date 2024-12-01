@@ -30,40 +30,38 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <title>Panel de Administración</title>
     <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/resposive.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/cerrarsesion.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container-fluid">
         <a class="navbar-brand" href="admin_dashboard.php">Administración J23</a>
-        <form class="form-inline ml-3" method="GET" action="admin_dashboard.php">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Apellido" name="apellido" value="<?php echo htmlspecialchars($_GET['apellido'] ?? ''); ?>" aria-label="Buscar">
-            <select class="form-control mx-2" name="curso" aria-label="Seleccionar curso">
-                <option value="">Seleccionar curso</option>
-                <?php while ($curso = mysqli_fetch_assoc($resultCursos)): ?>
-                    <option value="<?php echo $curso['id_curso']; ?>" <?php echo (isset($_GET['curso']) && $_GET['curso'] == $curso['id_curso']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($curso['nombre_curso']); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Filtrar</button>
-            <?php if (!empty($_GET['apellido']) || !empty($_GET['correo']) || !empty($_GET['curso'])): ?>
-                <a href="admin_dashboard.php" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Borrar Filtros</a>
-            <?php endif; ?>
-        </form>
-
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <form class="form-inline my-2 my-lg-0" method="GET" action="admin_dashboard.php">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar por Apellido" name="apellido" value="<?php echo htmlspecialchars($_GET['apellido'] ?? ''); ?>" aria-label="Buscar">
+                <select class="form-control mx-2" name="curso" aria-label="Seleccionar curso">
+                    <option value="">Seleccionar curso</option>
+                    <?php while ($curso = mysqli_fetch_assoc($resultCursos)): ?>
+                        <option value="<?php echo $curso['id_curso']; ?>" <?php echo (isset($_GET['curso']) && $_GET['curso'] == $curso['id_curso']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($curso['nombre_curso']); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Filtrar</button>
+                <?php if (!empty($_GET['apellido']) || !empty($_GET['correo']) || !empty($_GET['curso'])): ?>
+                    <a href="admin_dashboard.php" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Borrar Filtros</a>
+                <?php endif; ?>
+            </form>
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <button type="button" class="btn btn-light" data-toggle="modal" data-target="#crearAlumnoModal">Altas</button>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-light"g href="notas_media.php">Notas Media</a>
+                    <a class="btn btn-light" href="notas_media.php">Notas Media</a>
                 </li>
                 <li class="nav-item dropdown ml-3">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -80,8 +78,8 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     </div>
 </nav>
 
-     <!-- Modal para Crear Alumno -->
-     <div class="modal fade"
+<!-- Modal para Crear Alumno -->
+    <div class="modal fade"
         id="crearAlumnoModal"
         tabindex="-1"
         role="dialog"
@@ -149,7 +147,7 @@ $hayFiltros = !empty($apellido) || !empty($curso);
 
     <br>
     <div class="row justify-content-center">
-    <div class="col-lg-10 col-md-12">
+    <div class="col-lg-10 col-md-12 col-sm-12">
         <table class="table table-striped table-bordered text-center">
             <thead class="thead-dark">
                 <tr>
@@ -337,5 +335,6 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <script src="../js/eliminar.js"></script>
     <script src="../js/sweet_alert.js"></script>
     <script src="../js/validate_add_update.js"></script>
+    <script src="../js/cerrarsesion.js"></script>
 </body>
 </html>

@@ -1,0 +1,104 @@
+/* Estilos generales para dispositivos móviles */
+@media (max-width: 768px) {
+    /* Asegurarse de que el contenido no exceda el ancho de la pantalla */
+    html, body {
+        margin: 0;
+        padding: 0;
+        max-width: 100%; /* Prevenir cualquier desbordamiento horizontal */
+        overflow-x: hidden; /* Ocultar contenido que se desborde horizontalmente */
+    }
+
+    /* Contenedor principal */
+    .container-fluid {
+        max-width: 100%; /* Asegurarse de que el contenedor no supere el 100% del ancho */
+        padding: 0 1rem; /* Añadir un poco de padding lateral */
+    }
+
+    /* Ajustar el tamaño de la navbar */
+    .navbar {
+        padding: 0.5rem 1rem;
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+        width: 100%; /* Asegurarse de que la navbar ocupe el 100% del ancho */
+        display: flex;
+        justify-content: space-between; /* Espaciado entre los elementos de la navbar */
+    }
+
+    /* Alinear el botón de hamburguesa a la izquierda */
+    .navbar-toggler {
+        order: -1; /* Mover el botón de hamburguesa antes de "Administración J23" */
+    }
+
+    /* Ajustar el logo y el texto "Administración J23" */
+    .navbar-brand {
+        margin-right: auto; /* Asegurar que el texto se alinee después del botón de hamburguesa */
+    }
+
+    /* Asegurarse de que los botones en la navbar sean más grandes */
+    .navbar .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Ajustar el modal para que ocupe el 100% del ancho */
+    .modal-dialog {
+        max-width: 90%; /* Cambiar a 90% para un mejor ajuste */
+        margin: 0 auto; /* Centrar el modal */
+    }
+
+    /* Asegurarse de que los inputs y selects ocupen el 100% */
+    .form-control {
+        width: 100%;
+    }
+
+    /* Ajustar el tamaño de la tabla */
+    .table-wrapper {
+        overflow-x: auto; /* Permitir desplazamiento horizontal */
+        -webkit-overflow-scrolling: touch; /* Desplazamiento fluido en dispositivos táctiles */
+    }
+
+    .table {
+        font-size: 0.9rem; /* Reducir el tamaño de la fuente en móviles */
+        display: block; /* Hacer que la tabla sea un bloque para el desplazamiento */
+        width: 100%; /* Asegurar que la tabla ocupe todo el ancho disponible */
+    }
+
+    /* Asegurarse de que los elementos de la tabla se ajusten */
+    .table th, .table td {
+        white-space: nowrap; /* Evitar que el texto se desborde */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Agregar puntos suspensivos si el texto es demasiado largo */
+    }
+
+    /* Ajustar el tamaño de los botones en la tabla */
+    .btn {
+        font-size: 0.8rem; /* Reducir el tamaño de la fuente de los botones */
+        padding: 0.75rem; /* Espaciado cómodo para clics táctiles */
+    }
+
+    /* Espaciado en el modal */
+    .modal-body {
+        padding: 1rem; /* Aumentar el padding en el modal */
+    }
+
+    /* Ajustar el tamaño de los encabezados del modal */
+    .modal-header h5 {
+        font-size: 1.25rem; /* Aumentar el tamaño de la fuente del título del modal */
+    }
+
+    /* Asegurarse de que los elementos de formulario en el modal se ajusten */
+    .modal-body .form-group {
+        margin-bottom: 1rem; /* Espaciado entre los grupos de formulario */
+    }
+
+    /* Imágenes y videos */
+    img, video {
+        max-width: 100%;
+        height: auto; /* Asegurar que se mantengan proporcionados */
+    }
+
+    /* Elementos flexibles */
+    .d-flex {
+        flex-wrap: wrap; /* Permitir envoltura de elementos en pantallas pequeñas */
+        justify-content: center; /* Centrar los elementos */
+    }
+}
