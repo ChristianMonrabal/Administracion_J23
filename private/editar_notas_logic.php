@@ -94,8 +94,8 @@ if ($id_alumno) {
 
     // Obtener asignaturas y notas existentes
     $queryNotas = "SELECT n.id_asignatura, a.nombre_asignatura, n.nota FROM notas n 
-                   JOIN asignaturas a ON n.id_asignatura = a.id_asignatura 
-                   WHERE n.id_alumno = ?";
+                    JOIN asignaturas a ON n.id_asignatura = a.id_asignatura 
+                    WHERE n.id_alumno = ?";
     $stmtNotas = mysqli_prepare($conn, $queryNotas);
     mysqli_stmt_bind_param($stmtNotas, "i", $id_alumno);
     mysqli_stmt_execute($stmtNotas);

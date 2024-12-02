@@ -32,15 +32,6 @@ $hayFiltros = !empty($apellido) || !empty($curso);
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/resposive.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        body {
-            touch-action: manipulation; /* Evita el zoom en dispositivos táctiles */
-        }
-        button, input, select {
-            touch-action: manipulation; /* Evita el zoom en botones y elementos interactivos */
-            font-size: 16px; /* Asegúrate de que el tamaño de fuente sea adecuado */
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
@@ -206,8 +197,8 @@ $hayFiltros = !empty($apellido) || !empty($curso);
 </div>
 
 
-   <!-- Modal para Editar Alumno -->
-   <div class="modal fade" id="editarAlumnoModal" tabindex="-1" role="dialog" aria-labelledby="editarAlumnoModalLabel" aria-hidden="true"
+<!-- Modal para Editar Alumno -->
+    <div class="modal fade" id="editarAlumnoModal" tabindex="-1" role="dialog" aria-labelledby="editarAlumnoModalLabel" aria-hidden="true"
         data-open="<?php echo !empty($alumnoSeleccionado) ? 'true' : 'false'; ?>">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
