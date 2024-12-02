@@ -1,70 +1,87 @@
 <?php
+// Inicia una sesión para gestionar el estado del usuario
 session_start();
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['userType'] !== 'Administrador') {
-    header("Location: ../public/signin.php");
-    exit();
-}
+// Verifica si la solicitud se realiza mediante el método POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Obtiene y recorta el nombre de usuario del formulario
+    $username = trim($_POST['username']);
+    // Obtiene y recorta la contraseña del formulario
+    $password = trim($_POST['password']);
+    // Sanea el nombre de usuario para evitar la inyección de caracteres especiales
+    $username = filter_var($username, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-include("../db/conexion.php");
-
-$errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_alumno'])) {
-    $nombre = trim($_POST['nombre']);
-    $apellido = trim($_POST['apellido']);
-    $correo = trim($_POST['correo']);
-    $curso = intval($_POST['curso']);
-
-    if (empty($nombre)) {
-        $errors['nombre'] = "El nombre es obligatorio.";
-    }
-
-    if (empty($apellido)) {
-        $errors['apellido'] = "El apellido es obligatorio.";
-    }
-
-    if (empty($correo)) {
-        $errors['correo'] = "El correo es obligatorio.";
-    } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        $errors['correo'] = "El correo debe ser válido.";
-    } elseif (!preg_match('/@fje\.edu$/', $correo)) {
-        $errors['correo'] = "El correo debe tener el dominio @fje.edu.";
-    }
-
-    if (empty($curso)) {
-        $errors['curso'] = "El curso es obligatorio.";
-    }
-
-    if (empty($errors)) {
-        $query = "SELECT COUNT(*) FROM alumnos WHERE correo_alumno = ?";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "s", $correo);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $count);
-        mysqli_stmt_fetch($stmt);
-        mysqli_stmt_close($stmt);
-
-        if ($count > 0) {
-            $errors['correo'] = "El correo electrónico ya está registrado.";
-        }
-    }
-
-    if (empty($errors)) {
-        $insertQuery = "INSERT INTO alumnos (nombre_alumno, apellido_alumno, correo_alumno, id_curso) VALUES (?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $insertQuery);
-        mysqli_stmt_bind_param($stmt, "sssi", $nombre, $apellido, $correo, $curso);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $_SESSION['usuario_creado'] = true;
-        header("Location: ../public/admin_dashboard.php");
-        exit();
+    // Verifica si alguno de los campos está vacío
+    if (empty($username) || empty($password)) {
+        // Mensaje de error si faltan campos
+        $errorMessage = "Por favor, complete todos los campos.";
     } else {
-        $_SESSION['errors'] = $errors;
-        $_SESSION['form_data'] = $_POST;
-        header("Location: ../public/admin_dashboard.php");
-        exit();
+        // Incluye el archivo de conexión a la base de datos
+        include("../db/conexion.php");
+
+        // Consulta SQL para buscar el usuario por su nombre de usuario
+        $query = "SELECT password_usuario, tipo_usuario, nombre_usuario, apellido_usuario FROM usuarios WHERE username_usuario = ?";
+        // Prepara la consulta para evitar inyección SQL
+        $stmt = mysqli_prepare($conn, $query);
+
+        // Verifica si la consulta fue preparada correctamente
+        if ($stmt) {
+            // Asocia los parámetros a la consulta preparada
+            mysqli_stmt_bind_param($stmt, "s", $username);
+            // Ejecuta la consulta
+            mysqli_stmt_execute($stmt);
+            // Almacena el resultado de la consulta
+            mysqli_stmt_store_result($stmt);
+
+            // Verifica si se encontró algún usuario con el nombre de usuario proporcionado
+            if (mysqli_stmt_num_rows($stmt) > 0) {
+                // Asocia las columnas del resultado a variables
+                mysqli_stmt_bind_result($stmt, $storedPassword, $userType, $nombreUsuario, $apellidoUsuario);
+                // Obtiene los datos del resultado
+                mysqli_stmt_fetch($stmt);
+
+                // Verifica si la contraseña proporcionada coincide con la almacenada en la base de datos
+                if (password_verify($password, $storedPassword)) {
+                    // Verifica si el usuario es un administrador
+                    if ($userType === 'Administrador') {
+                        // Establece las variables de sesión para el usuario autenticado
+                        $_SESSION['loggedin'] = true;
+                        $_SESSION['username'] = $username;
+                        $_SESSION['userType'] = $userType;
+                        $_SESSION['nombre'] = $nombreUsuario;
+                        $_SESSION['apellido'] = $apellidoUsuario;
+
+                        // Redirige al usuario al panel de administrador
+                        header("Location: ../public/admin_dashboard.php");
+                        exit(); // Detiene la ejecución del script después de la redirección
+                    } else {
+                        // Mensaje de error si el usuario no tiene permisos de administrador
+                        $errorMessage = "No tienes permisos de administrador.";
+                    }
+                } else {
+                    // Mensaje de error si la contraseña no coincide
+                    $errorMessage = "Los datos introducidos son incorrectos.";
+                }
+            } else {
+                // Mensaje de error si no se encontró al usuario
+                $errorMessage = "Los datos introducidos son incorrectos.";
+            }
+
+            // Cierra la consulta preparada
+            mysqli_stmt_close($stmt);
+        } else {
+            // Mensaje de error si no se pudo preparar la consulta
+            $errorMessage = "Error al preparar la consulta.";
+        }
+
+        // Cierra la conexión con la base de datos
+        mysqli_close($conn);
+    }
+
+    // Si hay un mensaje de error, redirige al formulario con el mensaje como parámetro en la URL
+    if (isset($errorMessage)) {
+        header("Location: ../public/signin.php?error=" . urlencode($errorMessage) . "&username=" . urlencode($username));
+        exit(); // Detiene la ejecución del script después de la redirección
     }
 }
 ?>
