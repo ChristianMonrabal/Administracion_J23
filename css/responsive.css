@@ -1,4 +1,11 @@
-/* Estilos generales para dispositivos móviles */
+body {
+    touch-action: manipulation; /* Evita el zoom en dispositivos táctiles */
+}
+button, input, select {
+    touch-action: manipulation; /* Evita el zoom en botones y elementos interactivos */
+    font-size: 16px; /* Asegúrate de que el tamaño de fuente sea adecuado */
+}
+
 @media (max-width: 768px) {
     /* Asegurarse de que el contenido no exceda el ancho de la pantalla */
     html, body {
